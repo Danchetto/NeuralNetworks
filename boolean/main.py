@@ -1,5 +1,3 @@
-import math
-
 class Perceptron:
     learning_norm = 0.2
 
@@ -18,26 +16,19 @@ class Perceptron:
         return result
 
     def threshold_func(self, net):
-        if net >= 0:
-            return 1
-        else:
-            return 0
+        return 1 if net >= 0 else 0
 
     def sigmoid_func(self, net):
         result = 0.5 * (net / (1 + abs(net)) + 1)
-        if result >= 0.5:
-            return 1
-        else:
-            return 0
+        return 1 if result >= 0.5 else 0
 
     def sigmoid_derivative(self, net):
         return 0.5 / ((abs(net) + 1)**2)
 
     # mode 's' - sigmoid function
-    # other - threshold function
+    # other modes - threshold function
     def learning_cycle(self, data, correct_data, mode='s'):
-        E = 0
-
+        error_count = 0
         if mode == 's':
             derivative = self.sigmoid_derivative
             activate_function = self.sigmoid_func
@@ -55,9 +46,8 @@ class Perceptron:
                                    * derivative(net) * self.values[i]
 
             if correct_data[cycle] != current_result:
-                E += 1
-        # print(current_result)
-        return E
+                error_count += 1
+        return error_count
 
     def get_result(self, table):
         result = []
@@ -80,7 +70,6 @@ table = [
 correct = [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
 
 perceptron.set_weights([0, 0, 0, 0, 0])
-
 steps = 0
 
 while perceptron.learning_cycle(table, correct, 'o') != 0:
@@ -91,13 +80,12 @@ print('DONE in ' + steps.__str__() + ' steps by threshold function')
 print('Weights: ' + perceptron.weights.__str__())
 
 perceptron.set_weights([0, 0, 0, 0, 0])
-
 steps = 0
 
 while perceptron.learning_cycle(table, correct) != 0:
     steps += 1
 
-print('DONE in ' + steps.__str__() + ' steps by sigmoid function')
+print('\n' + 'DONE in ' + steps.__str__() + ' steps by sigmoid function')
 print('Weights: ' + perceptron.weights.__str__())
 
-print(perceptron.get_result(table))
+print('\n' + perceptron.get_result(table).__str__())
