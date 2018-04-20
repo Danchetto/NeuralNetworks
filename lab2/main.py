@@ -4,13 +4,14 @@ import matplotlib.pyplot as plt
 class Perceptron:
     learning_norm = 0.5
     p = 4
+    values = []
 
     def set_values(self, data_x):
         self.values = [1]
         self.values.extend(data_x)
 
     def set_weights(self, data_w):
-        self.weights = data_w
+        self.weights = data_w.copy()
 
     def next_x(self):
         result = 0
@@ -18,33 +19,27 @@ class Perceptron:
             result += self.values[i] * self.weights[i]
         return result
 
-    def learning_cycle(self, correct_data):
-        error_count = 0
+    def learning_cycle(self, learning_data, correct_data):
         print('Weights: ' + self.weights.__str__() + '\n')
+        print('Values: ' + self.values.__str__() + '\n')
         counter = self.p
-        new_weights = []
-        all_result = correct_data[0:self.p]
+        new_weights = self.weights.copy()
+        all_result = correct_data[0:self.p].copy()
         while counter <= 20:
             values = []
             for cycle in range(self.p):
                 values.append(correct_data[counter - self.p + cycle])
-            print(values)
-            print('\n')
 
             self.set_values(values)
             current_result = self.next_x()
             all_result.append(current_result)
 
-            new_weights = self.weights
             for i in range(len(self.weights)):
                 new_weights[i] += self.learning_norm * (correct_data[counter] - current_result) * self.values[i]
 
-            if correct_data[counter] != current_result:
-                error_count += 1
-
             counter += 1
 
-        self.weights = new_weights
+        self.set_weights(new_weights)
         return all_result
 
 
@@ -73,15 +68,17 @@ for i in range(1, 22):
     x.append(left)
     left += delta
 
+learning_data = correct_data.copy()
+
 perceptron.set_weights([0, 0, 0, 0, 0])
 
 steps = 0
-while steps < 90:
-    perceptron.learning_cycle(correct_data)
+while steps < 100:
+    learning_data = perceptron.learning_cycle(learning_data, correct_data)
     steps += 1
     continue
 
-result = perceptron.learning_cycle(correct_data)
+result = perceptron.learning_cycle(learning_data, correct_data)
 error = round(error_function(result, correct_data), 5)
 print(result)
 print(correct_data)
