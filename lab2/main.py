@@ -1,10 +1,12 @@
 import math
-import matplotlib.pyplot as plt
 
 class Perceptron:
-    learning_norm = 0.5
-    p = 4
-    values = []
+
+    def __init__(self):
+        self.learning_norm = 0.5
+        self.p = 4
+        self.values = []
+        self.weights = []
 
     def set_values(self, data_x):
         self.values = [1]
@@ -19,12 +21,11 @@ class Perceptron:
             result += self.values[i] * self.weights[i]
         return result
 
-    def learning_cycle(self, learning_data, correct_data):
+    def learning_cycle(self, correct_data):
         print('Weights: ' + self.weights.__str__() + '\n')
-        print('Values: ' + self.values.__str__() + '\n')
         counter = self.p
         new_weights = self.weights.copy()
-        all_result = correct_data[0:self.p].copy()
+        all_result = correct_data[0:self.p]
         while counter <= 20:
             values = []
             for cycle in range(self.p):
@@ -74,11 +75,11 @@ perceptron.set_weights([0, 0, 0, 0, 0])
 
 steps = 0
 while steps < 100:
-    learning_data = perceptron.learning_cycle(learning_data, correct_data)
+    perceptron.learning_cycle(correct_data)
     steps += 1
     continue
 
-result = perceptron.learning_cycle(learning_data, correct_data)
+result = perceptron.learning_cycle(correct_data)
 error = round(error_function(result, correct_data), 5)
 print(result)
 print(correct_data)

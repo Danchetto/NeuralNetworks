@@ -126,6 +126,6 @@ errors = [perceptron.learning_cycle(small_table, small_correct, 's')]
 while errors[-1] != 0:
     steps += 1
     errors.append(perceptron.learning_cycle(small_table, small_correct, 's'))
-#
+
 print('\n' + 'DONE in ' + steps.__str__() + ' steps by sigmoid function on min data')
 print('Weights: ' + perceptron.weights.__str__())
