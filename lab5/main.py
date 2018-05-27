@@ -11,8 +11,7 @@ class HopfieldNetwork:
                   -1, -1, 1, -1, -1,
                   -1, -1, 1, -1, -1,
                   1, 1, 1, 1, 1]]
-        self.J = [[1, -1, -1, 1, -1,
-                  1, -1, -1, -1, 1,
+        self.J = [[1, -1, -1, 1, -1, 1, -1, -1, -1, 1,
                   1, -1, -1, -1, 1,
                   1, 1, 1, 1, -1]]
 
@@ -41,18 +40,23 @@ class HopfieldNetwork:
             else:
                 cur = self.prevY[i]
             out.append(cur)
+        self.prevY = out.copy()
         return out
 
     def get_result(self, data):
         self.prevY = data
         net = self.net_count()
         result = self.out_function(net)
-        # self.prevY = result
-        return result
+        if result == self.F[0]:
+            return 'F'
+        elif result == self.H[0]:
+            return 'H'
+        elif result == self.J[0]:
+            return 'J'
+        return 'error'
 
 
 network = HopfieldNetwork()
-print(network.get_result([1, -1, -1, 1, -1,
-                  1, -1, -1, -1, 1,
-                  1, -1, -1, -1, 1,
-                  1, 1, 1, 1, -1]))
+test = [-1, -1, -1, -1, -1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, -1]
+print(test)
+print(network.get_result(test))

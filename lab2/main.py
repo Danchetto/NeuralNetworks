@@ -1,10 +1,11 @@
 import math
+from matplotlib import pyplot as plt
 
 class Perceptron:
 
     def __init__(self):
         self.learning_norm = 0.5
-        self.p = 4
+        self.p = 3
         self.values = []
         self.weights = []
 
@@ -36,11 +37,10 @@ class Perceptron:
             all_result.append(current_result)
 
             for i in range(len(self.weights)):
-                new_weights[i] += self.learning_norm * (correct_data[counter] - current_result) * self.values[i]
+                self.weights[i] += self.learning_norm * (correct_data[counter] - current_result) * self.values[i]
 
             counter += 1
 
-        self.set_weights(new_weights)
         return all_result
 
 
@@ -71,10 +71,10 @@ for i in range(1, 22):
 
 learning_data = correct_data.copy()
 
-perceptron.set_weights([0, 0, 0, 0, 0])
+perceptron.set_weights([0, 0, 0, 0])
 
 steps = 0
-while steps < 100:
+while steps < 1000:
     perceptron.learning_cycle(correct_data)
     steps += 1
     continue
@@ -86,3 +86,9 @@ print(correct_data)
 print('Error = ', error)
 
 print("DONE in {steps} steps".format(steps=steps))
+
+plt.plot(x, correct_data)
+plt.plot(x, result, 'ro')
+plt.title('x = y ^ 2 \n E = {error}'.format(steps=steps, error=error))
+plt.grid()
+plt.show()

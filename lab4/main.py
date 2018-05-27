@@ -1,4 +1,5 @@
 import math
+from matplotlib import pyplot as plt
 
 class Network:
     def __init__(self):
@@ -11,10 +12,6 @@ class Network:
         self.norm = 0.6
         self.out = []
 
-    def set_weights(self, w00, w01, w10, w11):
-        self.W00.extend([w00, w01])
-        self.W01.extend([w10, w11])
-
     def activation_func(self, net):
         return (1 - math.exp(-net)) / (1 + math.exp(-net))
 
@@ -23,8 +20,8 @@ class Network:
 
     def learning_cycle(self):
         counter = 0
-
-        while counter < 2000:
+        # error = 1
+        while True:
             net0 = self.W00[0] + self.X[1] * self.W01[0]
             newX = [1, self.activation_func(net0)]
             Y = []
@@ -45,13 +42,18 @@ class Network:
 
             error = math.sqrt(sum([(self.correct[i] - Y[i]) ** 2 for i in range(3)]))
             print('Y = ', Y, '\n', 'E(', counter, ') = ', error)
+            errors.append(error)
             if error <= 0.0001:
                 self.out = Y.copy()
                 break
             counter += 1
 
-        return self.out
+        return (self.out, error)
 
 network = Network()
+errors = []
+result = network.learning_cycle()
 
-print(network.learning_cycle())
+plt.plot(errors, 'r')
+plt.grid()
+plt.show()
